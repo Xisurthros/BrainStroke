@@ -14,7 +14,7 @@ output: rmarkdown::github_document
 rm(list=ls()) # Remove all variables previously stored
 pacman::p_load(pacman, dplyr, GGally, ggplot2, ggthemes, ggvis, httr,
                lubridate, plotly, rio, rmarkdown, shiny, stringr, tidyr,
-               psych)
+               psych, ggExtra)
 library(datasets)
 ```
 
@@ -25,11 +25,11 @@ BrainStroke <- read.csv("Z:/Programming/R/BrainStroke/BrainStroke.csv")
 head(BrainStroke)
 ```
 
-## Age and Gender
+## Age and Gender distribution
 
 ```{r}
 ggplot(BrainStroke, aes(x=age, fill=gender)) +
-  labs(title = "Age distribution in Dataset | Stacked") +
+  labs(title = "Age distribution | Stacked") +
   geom_histogram(bins=30)
 
 hist(BrainStroke$age [BrainStroke$gender == 'Male'],
@@ -53,11 +53,11 @@ hist(BrainStroke$age [BrainStroke$gender == 'Female'],
 
 ```{r}
 ggplot(BrainStroke, aes(x=age, fill=stroke==1)) +
-  labs(title = "Age vs Stroke strokes | Stacked") +
+  labs(title = "Age vs Stroke | Stacked", fill = 'Stroke') +
   geom_histogram(bins=30)
 
 hist(BrainStroke$age [BrainStroke$stroke == 1 & BrainStroke$gender == 'Male'],
-     main = 'Male',
+     main = 'Male strokes by age',
      ylab = 'count',
      xlab = 'Age',
      col = 'red',
@@ -65,7 +65,7 @@ hist(BrainStroke$age [BrainStroke$stroke == 1 & BrainStroke$gender == 'Male'],
      )
 
 hist(BrainStroke$age [BrainStroke$stroke == 1 & BrainStroke$gender == 'Female'],
-     main = 'Female',
+     main = 'Female strokes by age',
      ylab = 'count',
      xlab = 'Age',
      col = 'blue',
@@ -92,10 +92,29 @@ hist(BrainStroke$bmi [BrainStroke$stroke == 1 & BrainStroke$gender == 'Female'],
      )
 ```
 
+## Glucose Level vs Stroke
+
+```{r}
+hist(BrainStroke$avg_glucose_level [BrainStroke$stroke == 1 & BrainStroke$gender == 'Male'],
+     main = 'Male',
+     ylab = 'count',
+     xlab = 'BMI',
+     col = 'red',
+     breaks = 30
+     )
+
+hist(BrainStroke$avg_glucose_level [BrainStroke$stroke == 1 & BrainStroke$gender == 'Female'],
+     main = 'Female',
+     ylab = 'count',
+     xlab = 'BMI',
+     col = 'blue',
+     breaks = 30
+     )
+```
+
 ## BMI vs Avg Glucose Level
 
 ```{r}
-library(ggExtra)
 
 ggMarginal(ggplot(data = BrainStroke, mapping = aes(x = bmi, y = avg_glucose_level)) +
     geom_point(aes(color = gender)), type = "histogram", fill="pink")
@@ -137,5 +156,3 @@ hist(BrainStroke$bmi [BrainStroke$gender == 'Female'],
      breaks = 30
      )
 ```
-
-## Gender vs Stroke
