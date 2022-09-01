@@ -12,7 +12,7 @@ Jacob Hobbs (github:@xisurthros)
 rm(list=ls()) # Remove all variables previously stored
 pacman::p_load(pacman, dplyr, GGally, ggplot2, ggthemes, ggvis, httr,
                lubridate, plotly, rio, rmarkdown, shiny, stringr, tidyr,
-               psych)
+               psych, ggExtra)
 library(datasets)
 ```
 
@@ -38,11 +38,11 @@ head(BrainStroke)
     ## 5          Urban            186.21 29.0 formerly smoked      1
     ## 6          Rural             70.09 27.4    never smoked      1
 
-## Age and Gender
+## Age and Gender distribution
 
 ``` r
 ggplot(BrainStroke, aes(x=age, fill=gender)) +
-  labs(title = "Age distribution in Dataset | Stacked") +
+  labs(title = "Age distribution | Stacked") +
   geom_histogram(bins=30)
 ```
 
@@ -76,7 +76,7 @@ hist(BrainStroke$age [BrainStroke$gender == 'Female'],
 
 ``` r
 ggplot(BrainStroke, aes(x=age, fill=stroke==1)) +
-  labs(title = "Age vs Stroke strokes | Stacked") +
+  labs(title = "Age vs Stroke | Stacked", fill = 'Stroke') +
   geom_histogram(bins=30)
 ```
 
@@ -84,7 +84,7 @@ ggplot(BrainStroke, aes(x=age, fill=stroke==1)) +
 
 ``` r
 hist(BrainStroke$age [BrainStroke$stroke == 1 & BrainStroke$gender == 'Male'],
-     main = 'Male',
+     main = 'Male strokes by age',
      ylab = 'count',
      xlab = 'Age',
      col = 'red',
@@ -96,7 +96,7 @@ hist(BrainStroke$age [BrainStroke$stroke == 1 & BrainStroke$gender == 'Male'],
 
 ``` r
 hist(BrainStroke$age [BrainStroke$stroke == 1 & BrainStroke$gender == 'Female'],
-     main = 'Female',
+     main = 'Female strokes by age',
      ylab = 'count',
      xlab = 'Age',
      col = 'blue',
@@ -132,25 +132,40 @@ hist(BrainStroke$bmi [BrainStroke$stroke == 1 & BrainStroke$gender == 'Female'],
 
 ![](BrainStroke_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
 
-## BMI vs Avg Glucose Level
+## Glucose Level vs Stroke
 
 ``` r
-library(ggExtra)
+hist(BrainStroke$avg_glucose_level [BrainStroke$stroke == 1 & BrainStroke$gender == 'Male'],
+     main = 'Male',
+     ylab = 'count',
+     xlab = 'BMI',
+     col = 'red',
+     breaks = 30
+     )
 ```
 
-    ## 
-    ## Attaching package: 'ggExtra'
+![](BrainStroke_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-    ## The following object is masked from 'package:shiny':
-    ## 
-    ##     runExample
+``` r
+hist(BrainStroke$avg_glucose_level [BrainStroke$stroke == 1 & BrainStroke$gender == 'Female'],
+     main = 'Female',
+     ylab = 'count',
+     xlab = 'BMI',
+     col = 'blue',
+     breaks = 30
+     )
+```
+
+![](BrainStroke_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
+
+## BMI vs Avg Glucose Level
 
 ``` r
 ggMarginal(ggplot(data = BrainStroke, mapping = aes(x = bmi, y = avg_glucose_level)) +
     geom_point(aes(color = gender)), type = "histogram", fill="pink")
 ```
 
-![](BrainStroke_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](BrainStroke_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ## Age vs BMI
 
@@ -167,7 +182,7 @@ ggplot(BrainStroke, aes(x=age, y=bmi)) +
 
     ## `geom_smooth()` using formula 'y ~ x'
 
-![](BrainStroke_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](BrainStroke_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ## Gender vs BMI
 
@@ -177,7 +192,7 @@ ggplot(BrainStroke, aes(x=bmi, fill=gender)) +
   geom_histogram(bins=30)
 ```
 
-![](BrainStroke_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](BrainStroke_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
 hist(BrainStroke$bmi [BrainStroke$gender == 'Male'],
@@ -189,7 +204,7 @@ hist(BrainStroke$bmi [BrainStroke$gender == 'Male'],
      )
 ```
 
-![](BrainStroke_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+![](BrainStroke_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
 
 ``` r
 hist(BrainStroke$bmi [BrainStroke$gender == 'Female'],
@@ -201,6 +216,4 @@ hist(BrainStroke$bmi [BrainStroke$gender == 'Female'],
      )
 ```
 
-![](BrainStroke_files/figure-gfm/unnamed-chunk-8-3.png)<!-- -->
-
-## Gender vs Stroke
+![](BrainStroke_files/figure-gfm/unnamed-chunk-9-3.png)<!-- -->
